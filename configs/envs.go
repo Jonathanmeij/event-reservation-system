@@ -20,7 +20,7 @@ type Config struct {
 var Envs = initConfig()
 
 func initConfig() Config {
-	godotenv.Load()
+	godotenv.Load(".env")
 
 	return Config{
 		PublicHost:             getEnv("PUBLIC_HOST", "http://localhost"),

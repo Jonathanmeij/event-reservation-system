@@ -29,9 +29,9 @@ func (r *CreateEventRequest) ToEvent() Event {
 }
 
 type EventStore interface {
-	GetEventByID(ID int) error
+	GetEventByID(id int) error
 	GetEvents() ([]*Event, error)
 	CreateEvent(event Event) error
-	DeleteEvent() error
+	DeleteEvent(id int) error
 	UpdateEvent() error
 }

@@ -6,8 +6,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// todo receive env data
 func NewDatabase(user string, dbname string, password string) (*sql.DB, error) {
-	connStr := "user=" + user + " dbname=" + dbname + " password=" + user + " sslmode=disable"
+	connStr := "user=postgres dbname=postgres password=gobank sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err

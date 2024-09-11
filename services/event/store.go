@@ -14,7 +14,7 @@ func NewStore(db *sql.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) GetEventByID(ID int) error {
+func (s *Store) GetEventByID(id int) error {
 	return nil
 }
 
@@ -39,8 +39,8 @@ func (s *Store) GetEvents() ([]*types.Event, error) {
 
 func (s *Store) CreateEvent(event types.Event) error {
 	_, err := s.db.Exec(`INSERT INTO events 
-	(title, description, imageUrl, date, createdAt) 
-	VALUES (?,?,?,?,?)`, event.Title, event.Description, event.ImageUrl, event.Date, event.CreatedAt)
+	(title, description, image_url, date, created_at) 
+	VALUES ($1, $2, $3, $4, $5)`, event.Title, event.Description, event.ImageUrl, event.Date, event.CreatedAt)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,12 @@ func (s *Store) CreateEvent(event types.Event) error {
 	return nil
 }
 
-func (s *Store) DeleteEvent() error {
+func (s *Store) DeleteEvent(id int) error {
+	_, err := s.db.Exec("DELETE FROM events WHERE id=$1", id)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
