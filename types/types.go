@@ -65,6 +65,28 @@ type User struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
+type RegisterRequest struct {
+	FirstName string `json:"firstName" validate:"required"`
+	LastName  string `json:"lastName" validate:"required"`
+	Email     string `json:"email" validate:"required,email"`
+	Password  string `json:"password" validate:"required,min=6"`
+}
+
+func NewUser(firstName string, lastName string, email string, password string) *User {
+	return &User{
+		FirstName: firstName,
+		LastName:  lastName,
+		Email:     email,
+		Password:  password,
+		CreatedAt: time.Now(),
+	}
+}
+
+type LoginRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=6"`
+}
+
 type UserStore interface {
 	GetUserByEmail(email string) (*User, error)
 	GetUserByID(id int) (*User, error)

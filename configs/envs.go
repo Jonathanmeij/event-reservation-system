@@ -1,7 +1,9 @@
 package configs
 
 import (
+	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -20,7 +22,12 @@ type Config struct {
 var Envs = initConfig()
 
 func initConfig() Config {
-	godotenv.Load("../.env")
+	workingDir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	envPath := filepath.Join(workingDir, ".env")
+	godotenv.Load(envPath)
 
 	return Config{
 		PublicHost:             getEnv("PUBLIC_HOST", "http://localhost"),
