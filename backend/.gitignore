@@ -1,0 +1,4 @@
+bin/.envrc
+.env
+bin
+tmp

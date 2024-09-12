@@ -1,4 +1,1 @@
-bin/.envrc
-.env
-bin
-tmp
+frontend/.env
