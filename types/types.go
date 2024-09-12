@@ -28,10 +28,28 @@ func (r *CreateEventRequest) ToEvent() Event {
 	}
 }
 
+type UpdateEventRequest struct {
+	ID          int       `json:"id" validate:"required"`
+	Title       string    `json:"title" validate:"required"`
+	Description string    `json:"description" validate:"required"`
+	ImageUrl    string    `json:"imageUrl" validate:"required"`
+	Date        time.Time `json:"date" validate:"required"`
+}
+
+func (r *UpdateEventRequest) ToEvent() Event {
+	return Event{
+		ID:          r.ID,
+		Title:       r.Title,
+		Description: r.Description,
+		ImageUrl:    r.ImageUrl,
+		Date:        r.Date,
+	}
+}
+
 type EventStore interface {
-	GetEventByID(id int) error
+	GetEventByID(id int) (*Event, error)
 	GetEvents() ([]*Event, error)
 	CreateEvent(event Event) error
 	DeleteEvent(id int) error
-	UpdateEvent() error
+	UpdateEvent(event Event) error
 }
