@@ -46,16 +46,7 @@ func (r *UpdateEventRequest) ToEvent() Event {
 	}
 }
 
-type EventStore interface {
-	GetEventByID(id int) (*Event, error)
-	GetEvents() ([]*Event, error)
-	CreateEvent(event Event) error
-	DeleteEvent(id int) error
-	UpdateEvent(event Event) error
-}
-
-//users
-
+// users
 type User struct {
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
@@ -85,10 +76,4 @@ func NewUser(firstName string, lastName string, email string, password string) *
 type LoginRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=6"`
-}
-
-type UserStore interface {
-	GetUserByEmail(email string) (*User, error)
-	GetUserByID(id int) (*User, error)
-	CreateUser(User) error
 }

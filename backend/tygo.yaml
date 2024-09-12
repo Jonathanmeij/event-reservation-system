@@ -1,0 +1,12 @@
+packages:
+    # The package path just like you would import it in Go
+    - path: "github.com/jonathanmeij/go-reservation/types"
+      output_path: "../frontend/src/api/types.ts"
+      type_mappings:
+          time.Time: "Date "
+          null.String: "null | string"
+          null.Bool: "null | boolean"
+          uuid.UUID: "string /* uuid */"
+          uuid.NullUUID: "null | string /* uuid */"
+      exclude_files:
+          - "storeTypes.go"
