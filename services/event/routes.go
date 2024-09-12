@@ -49,6 +49,7 @@ func (h *Handler) handleGetEventByID(w http.ResponseWriter, r *http.Request) {
 	event, err := h.store.GetEventByID(id)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
 	}
 
 	utils.WriteJSON(w, http.StatusOK, event)
@@ -81,10 +82,12 @@ func (h *Handler) handleDeleteEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := utils.GetId(r)
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
+		return
 	}
 
 	if err := h.store.DeleteEvent(id); err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
 	}
 }
 

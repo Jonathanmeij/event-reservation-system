@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/jonathanmeij/go-reservation/configs"
@@ -57,6 +58,23 @@ func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.Handl
 
 		handlerFunc(w, r)
 	}
+}
+
+func CreateJWT(userID int) (string, error) {
+	expiration := time.Second * time.Duration(configs.Envs.JWTExpirationInSeconds)
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"userID":    strconv.Itoa(int(userID)),
+		"expiresAt": time.Now().Add(expiration).Unix(),
+	})
+
+	secret := []byte(configs.Envs.JWTSecret)
+	tokenString, err := token.SignedString(secret)
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, err
 }
 
 func validateJWT(tokenString string) (*jwt.Token, error) {

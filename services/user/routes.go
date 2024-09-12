@@ -20,7 +20,8 @@ func NewHandler(userStore types.UserStore) *Handler {
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-
+	router.HandleFunc("/account/login", h.HandleLoginUser).Methods(http.MethodPost)
+	router.HandleFunc("/account/register", h.HandleRegisterUser).Methods(http.MethodPost)
 }
 
 func (h *Handler) HandleRegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -53,4 +54,37 @@ func (h *Handler) HandleRegisterUser(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
+}
+
+func (h *Handler) HandleLoginUser(w http.ResponseWriter, r *http.Request) {
+	loginRequest := new(types.LoginRequest)
+	if err := utils.ParseJSON(r, loginRequest); err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	if err := utils.Validate.Struct(loginRequest); err != nil {
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
+		return
+	}
+
+	user, err := h.store.GetUserByEmail(loginRequest.Email)
+	if err != nil {
+		utils.WriteError(w, http.StatusForbidden, fmt.Errorf("invalid email or password"))
+		return
+	}
+
+	if !auth.CheckPasswordHash(loginRequest.Password, user.Password) {
+		utils.WriteError(w, http.StatusForbidden, fmt.Errorf("invalid email or password"))
+		return
+	}
+
+	jwtToken, err := auth.CreateJWT(user.ID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": jwtToken})
 }

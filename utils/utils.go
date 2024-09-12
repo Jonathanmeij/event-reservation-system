@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -31,15 +32,16 @@ func ParseJSON(r *http.Request, v any) error {
 }
 
 func GetTokenFromRequest(r *http.Request) string {
-	tokenAuth := r.Header.Get("Authorization")
-	tokenQuery := r.URL.Query().Get("access_token")
-
-	if tokenAuth != "" {
-		return tokenAuth
+	reqToken := r.Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer")
+	if len(splitToken) != 2 {
+		return ""
 	}
 
-	if tokenQuery != "" {
-		return tokenQuery
+	token := strings.TrimSpace(splitToken[1])
+
+	if token != "" {
+		return token
 	}
 
 	return ""
