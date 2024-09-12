@@ -20,7 +20,7 @@ type Config struct {
 var Envs = initConfig()
 
 func initConfig() Config {
-	godotenv.Load(".env")
+	godotenv.Load("../.env")
 
 	return Config{
 		PublicHost:             getEnv("PUBLIC_HOST", "http://localhost"),
@@ -33,7 +33,6 @@ func initConfig() Config {
 	}
 }
 
-// Gets the env by key or fallbacks
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value

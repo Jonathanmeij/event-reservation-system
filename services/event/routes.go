@@ -6,24 +6,27 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"github.com/jonathanmeij/go-reservation/services/auth"
 	"github.com/jonathanmeij/go-reservation/types"
 	"github.com/jonathanmeij/go-reservation/utils"
 )
 
 type Handler struct {
-	store types.EventStore
+	store     types.EventStore
+	userStore types.UserStore
 }
 
-func NewHandler(store types.EventStore) *Handler {
+func NewHandler(store types.EventStore, userStore types.UserStore) *Handler {
 	return &Handler{store: store}
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/events", h.handleGetEvents).Methods(http.MethodGet)
 	router.HandleFunc("/events/{id}", h.handleGetEventByID).Methods(http.MethodGet)
-	router.HandleFunc("/events", h.handleCreateEvent).Methods(http.MethodPost)
-	router.HandleFunc("/events/{id}", h.handleDeleteEvent).Methods(http.MethodDelete)
-	router.HandleFunc("/events", h.handleUpdateEvent).Methods(http.MethodPut)
+
+	router.HandleFunc("/events", auth.WithJWTAuth(h.handleCreateEvent, h.userStore)).Methods(http.MethodPost)
+	router.HandleFunc("/events/{id}", auth.WithJWTAuth(h.handleDeleteEvent, h.userStore)).Methods(http.MethodDelete)
+	router.HandleFunc("/events", auth.WithJWTAuth(h.handleUpdateEvent, h.userStore)).Methods(http.MethodPut)
 }
 
 func (h *Handler) handleGetEvents(w http.ResponseWriter, r *http.Request) {

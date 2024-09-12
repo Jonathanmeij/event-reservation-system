@@ -32,7 +32,7 @@ func ParseJSON(r *http.Request, v any) error {
 
 func GetTokenFromRequest(r *http.Request) string {
 	tokenAuth := r.Header.Get("Authorization")
-	tokenQuery := r.URL.Query().Get("token")
+	tokenQuery := r.URL.Query().Get("access_token")
 
 	if tokenAuth != "" {
 		return tokenAuth

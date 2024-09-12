@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jonathanmeij/go-reservation/services/event"
+	"github.com/jonathanmeij/go-reservation/services/user"
 )
 
 type APIServer struct {
@@ -25,8 +26,10 @@ func (s *APIServer) Run() error {
 	router := mux.NewRouter()
 	subrouter := router.PathPrefix("/api").Subrouter()
 
+	userStore := user.NewStore(s.db)
+
 	eventStore := event.NewStore(s.db)
-	eventHandler := event.NewHandler(eventStore)
+	eventHandler := event.NewHandler(eventStore, userStore)
 	eventHandler.RegisterRoutes(subrouter)
 
 	//static files
