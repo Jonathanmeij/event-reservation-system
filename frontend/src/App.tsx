@@ -1,20 +1,16 @@
-import { useGetEvents } from "./pages/events/api/use-get-events";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/auth/loginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
 
 function App() {
-  const { data, isLoading } = useGetEvents();
-
-  if (isLoading) {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    );
-  }
-
   return (
-    <>
-      <div>{data?.map((event) => <div key={event.id}>{event.title}</div>)}</div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<div />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
