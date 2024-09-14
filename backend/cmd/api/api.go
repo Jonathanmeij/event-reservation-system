@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jonathanmeij/go-reservation/services/event"
 	"github.com/jonathanmeij/go-reservation/services/user"
+	"github.com/rs/cors"
 )
 
 type APIServer struct {
@@ -37,7 +38,14 @@ func (s *APIServer) Run() error {
 	//static files
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowCredentials: true,
+		AllowedHeaders:   []string{"Authorization"},
+	})
+	handler := c.Handler(router)
+
 	log.Println("Listening on", s.addr)
 
-	return http.ListenAndServe(s.addr, router)
+	return http.ListenAndServe(s.addr, handler)
 }
