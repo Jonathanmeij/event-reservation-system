@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import useLogin from "@/queries/auth";
+import { useLogin } from "@/queries/auth";
 import { LoginRequest } from "@/api/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleX } from "lucide-react";
@@ -83,7 +83,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Email" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -104,11 +104,7 @@ export default function LoginPage() {
                       </Link>
                     </div>
                     <FormControl>
-                      <Input
-                        placeholder="password"
-                        type="password"
-                        {...field}
-                      />
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

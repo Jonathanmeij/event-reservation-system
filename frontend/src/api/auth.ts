@@ -12,6 +12,9 @@ export const login = async (loginRequest: LoginRequest) => {
 };
 
 export const register = async (registerRequest: RegisterRequest) => {
-  const { data } = await axios.post(`${ENDPOINT}/register`, registerRequest);
+  const { data } = await axios.post<TokenResponse>(
+    `${ENDPOINT}/register`,
+    registerRequest
+  );
   return data;
 };
