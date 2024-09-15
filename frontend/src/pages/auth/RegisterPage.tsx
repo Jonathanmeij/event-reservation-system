@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center">
+    <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50">
       <div className="max-w-96">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
@@ -46,9 +46,6 @@ export default function RegisterPage() {
             </div>
             <Button type="submit" className="w-full">
               Create an account
-            </Button>
-            <Button variant="outline" className="w-full">
-              Sign up with GitHub
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">

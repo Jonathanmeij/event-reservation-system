@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center">
+    <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50">
       <div className="max-w-96">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
