@@ -55,6 +55,20 @@ func (h *Handler) HandleRegisterUser(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
+
+	dbUser, err := h.store.GetUserByEmail(user.Email)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	jwtToken, err := auth.CreateJWT(dbUser.ID, []byte(configs.Envs.JWTSecret))
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": jwtToken})
 }
 
 func (h *Handler) HandleLoginUser(w http.ResponseWriter, r *http.Request) {
