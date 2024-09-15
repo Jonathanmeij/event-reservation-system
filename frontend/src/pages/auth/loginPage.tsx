@@ -6,7 +6,7 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,6 +29,7 @@ const formSchema = z.object({
 });
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,7 +38,11 @@ export default function LoginPage() {
     }
   });
 
-  const { mutate, isLoading, error } = useLogin();
+  const { mutate, isLoading, error } = useLogin(onSucces);
+
+  function onSucces() {
+    navigate("/");
+  }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const loginRequest: LoginRequest = {
