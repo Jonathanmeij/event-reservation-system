@@ -8,21 +8,21 @@ export interface Event {
   title: string;
   description: string;
   imageUrl: string;
-  date: Date ;
-  createdAt: Date ;
+  date: Date;
+  createdAt: Date;
 }
 export interface CreateEventRequest {
   title: string;
   description: string;
   imageUrl: string;
-  date: Date ;
+  date: Date;
 }
 export interface UpdateEventRequest {
   id: number /* int */;
   title: string;
   description: string;
   imageUrl: string;
-  date: Date ;
+  date: Date;
 }
 /**
  * users
@@ -32,7 +32,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  createdAt: Date ;
+  createdAt: Date;
 }
 export interface RegisterRequest {
   firstName: string;
@@ -43,4 +43,7 @@ export interface RegisterRequest {
 export interface LoginRequest {
   email: string;
   password: string;
+}
+export interface TokenResponse {
+  token: string;
 }

@@ -41,7 +41,8 @@ func (s *APIServer) Run() error {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:5173"},
 		AllowCredentials: true,
-		AllowedHeaders:   []string{"Authorization"},
+		AllowedHeaders:   []string{"Authorization", "Content-Type"},
+		Debug:            true,
 	})
 	handler := c.Handler(router)
 

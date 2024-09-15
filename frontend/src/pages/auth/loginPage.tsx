@@ -6,10 +6,48 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
+import useLogin from "@/queries/auth";
+import { LoginRequest } from "@/api/types";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CircleX } from "lucide-react";
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6)
+});
 
 export default function LoginPage() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
+
+  const { mutate, isLoading, error } = useLogin();
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const loginRequest: LoginRequest = {
+      email: values.email,
+      password: values.password
+    };
+
+    mutate(loginRequest);
+  }
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50">
       <div className="max-w-96">
@@ -20,29 +58,62 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+              {error && (
+                <div className="text-center text-sm text-red-500">
+                  <Alert variant="destructive">
+                    <CircleX className="size-5" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      {error.response?.data.error}
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link to="#" className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input id="password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
-          </div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex w-full justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <Link
+                        to="#"
+                        className="ml-auto inline-block text-sm underline"
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
+                    <FormControl>
+                      <Input
+                        placeholder="password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button isLoading={isLoading} type="submit" className="w-full">
+                Login
+              </Button>
+            </form>
+          </Form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link to="/register" className="underline">

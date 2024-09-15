@@ -68,7 +68,7 @@ func (h *Handler) HandleRegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": jwtToken})
+	utils.WriteJSON(w, http.StatusOK, types.TokenResponse{Token: jwtToken})
 }
 
 func (h *Handler) HandleLoginUser(w http.ResponseWriter, r *http.Request) {
@@ -101,5 +101,5 @@ func (h *Handler) HandleLoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": jwtToken})
+	utils.WriteJSON(w, http.StatusOK, types.TokenResponse{Token: jwtToken})
 }
