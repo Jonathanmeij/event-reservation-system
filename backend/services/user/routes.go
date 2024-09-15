@@ -76,7 +76,7 @@ func (h *Handler) HandleLoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !auth.CheckPasswordHash(loginRequest.Password, user.Password) {
+	if !auth.CheckPasswordHash(user.Password, loginRequest.Password) {
 		utils.WriteError(w, http.StatusForbidden, fmt.Errorf("invalid email or password"))
 		return
 	}
