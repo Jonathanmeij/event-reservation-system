@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"github.com/jonathanmeij/go-reservation/configs"
 	"github.com/jonathanmeij/go-reservation/services/auth"
 	"github.com/jonathanmeij/go-reservation/types"
 	"github.com/jonathanmeij/go-reservation/utils"
@@ -80,7 +81,7 @@ func (h *Handler) HandleLoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwtToken, err := auth.CreateJWT(user.ID)
+	jwtToken, err := auth.CreateJWT(user.ID, []byte(configs.Envs.JWTSecret))
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return

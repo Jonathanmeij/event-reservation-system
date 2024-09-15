@@ -22,7 +22,7 @@ func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.Handl
 	return func(w http.ResponseWriter, r *http.Request) {
 		tokenString := utils.GetTokenFromRequest(r)
 
-		token, err := validateJWT(tokenString)
+		token, err := validateJWT(tokenString, []byte(configs.Envs.JWTSecret))
 		if err != nil {
 			log.Printf("failed to validate token: %v", err)
 			permissionDenied(w)
@@ -60,7 +60,7 @@ func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.Handl
 	}
 }
 
-func CreateJWT(userID int) (string, error) {
+func CreateJWT(userID int, secret []byte) (string, error) {
 	expiration := time.Second * time.Duration(configs.Envs.JWTExpirationInSeconds)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -68,7 +68,6 @@ func CreateJWT(userID int) (string, error) {
 		"expiresAt": time.Now().Add(expiration).Unix(),
 	})
 
-	secret := []byte(configs.Envs.JWTSecret)
 	tokenString, err := token.SignedString(secret)
 	if err != nil {
 		return "", err
@@ -77,14 +76,13 @@ func CreateJWT(userID int) (string, error) {
 	return tokenString, err
 }
 
-func validateJWT(tokenString string) (*jwt.Token, error) {
+func validateJWT(tokenString string, secret []byte) (*jwt.Token, error) {
 	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		jwtSecret := []byte(configs.Envs.JWTSecret)
-		return []byte(jwtSecret), nil
+		return []byte(secret), nil
 	})
 }
 
