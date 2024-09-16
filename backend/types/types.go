@@ -46,6 +46,27 @@ func (r *UpdateEventRequest) ToEvent() Event {
 	}
 }
 
+type Location struct {
+	ID             int    `json:"id"`
+	Name           string `json:"name"`
+	AmountOfPeople int    `json:"amountOfPeople"`
+}
+
+type Ticket struct {
+	ID           int       `json:"id"`
+	EventID      int       `json:"eventId"`
+	PurchaseDate time.Time `json:"purchaseDate"`
+	SeatNumber   int       `json:"seatNumber"`
+	UserID       int       `json:"userId"`
+}
+
+type PlannedEvent struct {
+	ID         int       `json:"id"`
+	EventID    int       `json:"eventId"`
+	LocationID int       `json:"locationId"`
+	Date       time.Time `json:"date"`
+}
+
 // users
 type User struct {
 	ID        int       `json:"id"`

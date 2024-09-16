@@ -11,14 +11,25 @@ import EventsPage from "./pages/events/eventsPage";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/authContext";
 import Spinner from "./components/ui/spinner";
+import AdminPage from "./pages/admin/adminPage";
 
-const PrivateRoute = () => {
-  const { isAuthenticated, isLoading } = useContext(AuthContext);
+const PrivateRoute = ({ role }: { role?: string }) => {
+  const { isAuthenticated, isLoading, userData } = useContext(AuthContext);
 
   if (isLoading) {
     return (
       <div className="flex h-dvh w-screen items-center justify-center">
         <Spinner />
+      </div>
+    );
+  }
+
+  const isAllowed = role ? userData?.role === role : true;
+
+  if (!isAllowed) {
+    return (
+      <div>
+        <div>Unauthorized</div>
       </div>
     );
   }
@@ -32,8 +43,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/" element={<EventsPage />} />
+        <Route path="/" element={<EventsPage />} />
+
+        <Route element={<PrivateRoute role="admin" />}>
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
