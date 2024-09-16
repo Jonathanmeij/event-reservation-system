@@ -49,7 +49,7 @@ export default function RegisterPage() {
   const { mutate, isLoading, error } = useRegister(onSucces);
 
   function onSucces(res: TokenResponse) {
-    login(res.token);
+    login(res);
     navigate("/");
   }
 
@@ -65,7 +65,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-zinc-50">
+    <div className="flex items-center justify-center w-full min-h-screen bg-zinc-50">
       <div className="max-w-96">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
@@ -77,7 +77,7 @@ export default function RegisterPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
               {error && (
-                <div className="text-center text-sm text-red-500">
+                <div className="text-sm text-center text-red-500">
                   <Alert variant="destructive">
                     <CircleX className="size-5" />
                     <AlertTitle>Error</AlertTitle>
@@ -133,7 +133,7 @@ export default function RegisterPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex w-full justify-between">
+                    <div className="flex justify-between w-full">
                       <FormLabel>Password</FormLabel>
                     </div>
                     <FormControl>
@@ -151,7 +151,7 @@ export default function RegisterPage() {
               </Button>
             </form>
           </Form>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-sm text-center">
             Already have an account?{" "}
             <Link to="/login" className="underline">
               Sign in
