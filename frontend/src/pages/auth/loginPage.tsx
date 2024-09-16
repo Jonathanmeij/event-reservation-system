@@ -19,9 +19,11 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { useLogin } from "@/queries/auth";
-import { LoginRequest } from "@/api/types";
+import { LoginRequest, TokenResponse } from "@/api/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleX } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "@/contexts/authContext";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -30,6 +32,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +43,8 @@ export default function LoginPage() {
 
   const { mutate, isLoading, error } = useLogin(onSucces);
 
-  function onSucces() {
+  function onSucces(res: TokenResponse) {
+    login(res.token);
     navigate("/");
   }
 

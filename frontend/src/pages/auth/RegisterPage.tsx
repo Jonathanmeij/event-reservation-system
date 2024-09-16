@@ -1,4 +1,4 @@
-import { RegisterRequest } from "@/api/types";
+import { RegisterRequest, TokenResponse } from "@/api/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +17,11 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthContext } from "@/contexts/authContext";
 import { useRegister } from "@/queries/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleX } from "lucide-react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -33,6 +35,7 @@ const formSchema = z.object({
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,7 +48,8 @@ export default function RegisterPage() {
 
   const { mutate, isLoading, error } = useRegister(onSucces);
 
-  function onSucces() {
+  function onSucces(res: TokenResponse) {
+    login(res.token);
     navigate("/");
   }
 
