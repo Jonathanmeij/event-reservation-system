@@ -53,6 +53,7 @@ type User struct {
 	LastName  string    `json:"lastName"`
 	Email     string    `json:"email"`
 	Password  string    `json:"-"`
+	Role      string    `json:"role" tstype:"'admin' | 'user'"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -69,6 +70,7 @@ func NewUser(firstName string, lastName string, email string, password string) *
 		LastName:  lastName,
 		Email:     email,
 		Password:  password,
+		Role:      "user",
 		CreatedAt: time.Now(),
 	}
 }
@@ -79,5 +81,9 @@ type LoginRequest struct {
 }
 
 type TokenResponse struct {
-	Token string `json:"token"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Role      string `json:"role"`
+	Token     string `json:"token"`
 }
