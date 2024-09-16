@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 
@@ -9,14 +8,15 @@ import (
 	"github.com/jonathanmeij/go-reservation/services/event"
 	"github.com/jonathanmeij/go-reservation/services/user"
 	"github.com/rs/cors"
+	"gorm.io/gorm"
 )
 
 type APIServer struct {
 	addr string
-	db   *sql.DB
+	db   *gorm.DB
 }
 
-func NewAPIServer(addr string, db *sql.DB) *APIServer {
+func NewAPIServer(addr string, db *gorm.DB) *APIServer {
 	return &APIServer{
 		addr: addr,
 		db:   db,
