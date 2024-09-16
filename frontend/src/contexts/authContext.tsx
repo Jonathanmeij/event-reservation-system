@@ -1,7 +1,5 @@
-import { log } from "console";
 import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -23,11 +21,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token && !isTokenExpired(token)) {
       setIsAuthenticated(true);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, []);
 
   const login = (token: string) => {
@@ -52,23 +49,17 @@ function isTokenExpired(token: string | null): boolean {
     return true;
   }
   try {
-    // Decode the token to get its payload
     const decoded = jwtDecode(token);
 
-    // Get the current time in seconds since the Epoch
     const currentTime = Date.now() / 1000;
 
-    // Compare the expiration time with the current time
     if (decoded.exp && decoded.exp < currentTime) {
-      // Token has expired
       return true;
     } else {
-      // Token is valid
       return false;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    // Handle errors (e.g., invalid token format)
-    console.error("Invalid token:", error);
-    return true; // Treat invalid token as expired
+    return true;
   }
 }

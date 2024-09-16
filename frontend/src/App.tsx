@@ -10,12 +10,17 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import EventsPage from "./pages/events/eventsPage";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/authContext";
+import Spinner from "./components/ui/spinner";
 
 const PrivateRoute = () => {
   const { isAuthenticated, isLoading } = useContext(AuthContext);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex h-dvh w-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
