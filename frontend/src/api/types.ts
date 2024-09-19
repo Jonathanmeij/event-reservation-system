@@ -3,8 +3,11 @@
 //////////
 // source: types.go
 
+/**
+ * event
+ */
 export interface Event {
-  id: number /* int */;
+  id: number /* uint */;
   title: string;
   description: string;
   imageUrl: string;
@@ -18,11 +21,30 @@ export interface CreateEventRequest {
   date: Date ;
 }
 export interface UpdateEventRequest {
-  id: number /* int */;
   title: string;
   description: string;
   imageUrl: string;
   date: Date ;
+}
+export interface PlannedEvent {
+  id: number /* uint */;
+  eventId: number /* int */;
+  locationId: number /* int */;
+  date: Date ;
+  location: Location;
+}
+export interface CreatePlannedEventRequest {
+  eventId: number /* int */;
+  locationId: number /* int */;
+  date: Date ;
+}
+/**
+ * Location
+ */
+export interface Location {
+  id: number /* int */;
+  name: string;
+  amountOfPeople: number /* int */;
 }
 /**
  * users

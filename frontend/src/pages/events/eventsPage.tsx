@@ -1,21 +1,26 @@
-import { AuthContext } from "@/contexts/authContext";
 import { useGetEvents } from "@/queries/events";
-import { useContext } from "react";
+import EventCard from "./eventCard";
 
 export default function EventsPage() {
-  const { data, isLoading, isError } = useGetEvents();
-  const { userData, isAuthenticated } = useContext(AuthContext);
+  const events = useGetEvents();
 
-  return (
-    <div>
-      {isAuthenticated && (
-        <div>
-          <div>Welcome {userData?.firstName}</div>
+  if (events.data) {
+    return (
+      <div className="min-h-screen p-6 bg-zinc-100">
+        <div className="grid gap-4 mx-auto max-w-screen-2xl sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {events.data.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
         </div>
-      )}
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>Error</div>}
-      {data && data.map((event) => <div key={event.id}>{event.title}</div>)}
-    </div>
-  );
+
+        <div className="wrapper"></div>
+      </div>
+    );
+  }
+
+  if (events.error) {
+    return <div>Something went wrong</div>;
+  }
+
+  return <div>Loading...</div>;
 }

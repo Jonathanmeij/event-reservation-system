@@ -8,5 +8,7 @@ packages:
           null.Bool: "null | boolean"
           uuid.UUID: "string /* uuid */"
           uuid.NullUUID: "null | string /* uuid */"
+          #exclude storeTypes.go and entityTypes.go
       exclude_files:
           - "storeTypes.go"
+          - "entityTypes.go"
