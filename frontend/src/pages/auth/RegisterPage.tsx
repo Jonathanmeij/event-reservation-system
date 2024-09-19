@@ -65,7 +65,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full min-h-screen bg-zinc-50">
+    <div className="flex items-center justify-center flex-1 w-full bg-zinc-50">
       <div className="max-w-96">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>

@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { AuthContext } from "./contexts/authContext";
 import Spinner from "./components/ui/spinner";
 import AdminPage from "./pages/admin/adminPage";
+import Navbar from "./components/navbar";
 
 const PrivateRoute = ({ role }: { role?: string }) => {
   const { isAuthenticated, isLoading, userData } = useContext(AuthContext);
@@ -39,16 +40,19 @@ const PrivateRoute = ({ role }: { role?: string }) => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<EventsPage />} />
-        <Route element={<PrivateRoute role="admin" />}>
-          <Route path="/admin" element={<AdminPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <div className="flex flex-col min-h-screen">
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/" element={<EventsPage />} />
+          <Route element={<PrivateRoute role="admin" />}>
+            <Route path="/admin" element={<AdminPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

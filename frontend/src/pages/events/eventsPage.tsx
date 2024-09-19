@@ -6,7 +6,7 @@ export default function EventsPage() {
 
   if (events.data) {
     return (
-      <div className="min-h-screen p-6 bg-zinc-100">
+      <div className="flex-1 p-6 bg-zinc-100">
         <div className="grid gap-4 mx-auto max-w-screen-2xl sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {events.data.map((event) => (
             <EventCard key={event.id} event={event} />
