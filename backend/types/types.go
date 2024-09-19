@@ -2,6 +2,7 @@ package types
 
 import "time"
 
+// event
 type Event struct {
 	ID          int       `json:"id"`
 	Title       string    `json:"title"`
@@ -18,27 +19,24 @@ type CreateEventRequest struct {
 	Date        time.Time `json:"date" validate:"required"`
 }
 
-func (r *CreateEventRequest) ToEvent() Event {
-	return Event{
+func (r *CreateEventRequest) ToEvent() EventEntity {
+	return EventEntity{
 		Title:       r.Title,
 		Description: r.Description,
 		ImageUrl:    r.ImageUrl,
 		Date:        r.Date,
-		CreatedAt:   time.Now(),
 	}
 }
 
 type UpdateEventRequest struct {
-	ID          int       `json:"id" validate:"required"`
 	Title       string    `json:"title" validate:"required"`
 	Description string    `json:"description" validate:"required"`
 	ImageUrl    string    `json:"imageUrl" validate:"required"`
 	Date        time.Time `json:"date" validate:"required"`
 }
 
-func (r *UpdateEventRequest) ToEvent() Event {
-	return Event{
-		ID:          r.ID,
+func (r *UpdateEventRequest) ToEvent() EventEntity {
+	return EventEntity{
 		Title:       r.Title,
 		Description: r.Description,
 		ImageUrl:    r.ImageUrl,
@@ -46,25 +44,42 @@ func (r *UpdateEventRequest) ToEvent() Event {
 	}
 }
 
+type PlannedEvent struct {
+	ID         uint      `json:"id"`
+	EventID    int       `json:"eventId"`
+	LocationID int       `json:"locationId"`
+	Date       time.Time `json:"date"`
+	Location   Location  `json:"location"`
+}
+
+func NewPlannedEvent(plannedEventEntity *PlannedEventEntity) *PlannedEvent {
+	return &PlannedEvent{
+		ID:         plannedEventEntity.ID,
+		EventID:    plannedEventEntity.EventID,
+		LocationID: plannedEventEntity.LocationID,
+		Date:       plannedEventEntity.Date,
+	}
+}
+
+type CreatePlannedEventRequest struct {
+	EventID    int       `json:"eventId" validate:"required"`
+	LocationID int       `json:"locationId" validate:"required"`
+	Date       time.Time `json:"date" validate:"required"`
+}
+
+// Location
 type Location struct {
 	ID             int    `json:"id"`
 	Name           string `json:"name"`
 	AmountOfPeople int    `json:"amountOfPeople"`
 }
 
-type Ticket struct {
-	ID           int       `json:"id"`
-	EventID      int       `json:"eventId"`
-	PurchaseDate time.Time `json:"purchaseDate"`
-	SeatNumber   int       `json:"seatNumber"`
-	UserID       int       `json:"userId"`
-}
-
-type PlannedEvent struct {
-	ID         int       `json:"id"`
-	EventID    int       `json:"eventId"`
-	LocationID int       `json:"locationId"`
-	Date       time.Time `json:"date"`
+func NewLocation(locationEntity LocationEntity) *Location {
+	return &Location{
+		ID:             locationEntity.ID,
+		Name:           locationEntity.Name,
+		AmountOfPeople: locationEntity.AmountOfPeople,
+	}
 }
 
 // users
@@ -85,14 +100,13 @@ type RegisterRequest struct {
 	Password  string `json:"password" validate:"required,min=6"`
 }
 
-func NewUser(firstName string, lastName string, email string, password string) *User {
-	return &User{
+func NewUser(firstName string, lastName string, email string, password string) *UserEntity {
+	return &UserEntity{
 		FirstName: firstName,
 		LastName:  lastName,
 		Email:     email,
 		Password:  password,
 		Role:      "user",
-		CreatedAt: time.Now(),
 	}
 }
 

@@ -26,7 +26,7 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 
 	router.HandleFunc("/events", auth.WithJWTAuth(h.handleCreateEvent, h.userStore)).Methods(http.MethodPost)
 	router.HandleFunc("/events/{id}", auth.WithJWTAuth(h.handleDeleteEvent, h.userStore)).Methods(http.MethodDelete)
-	router.HandleFunc("/events", auth.WithJWTAuth(h.handleUpdateEvent, h.userStore)).Methods(http.MethodPut)
+	router.HandleFunc("/events/{id}", auth.WithJWTAuth(h.handleUpdateEvent, h.userStore)).Methods(http.MethodPut)
 }
 
 func (h *Handler) handleGetEvents(w http.ResponseWriter, r *http.Request) {
@@ -92,24 +92,39 @@ func (h *Handler) handleDeleteEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleUpdateEvent(w http.ResponseWriter, r *http.Request) {
+	userID, err := utils.GetId(r)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
+		return
+	}
+
 	updateEventRequest := new(types.UpdateEventRequest)
 	if err := utils.ParseJSON(r, &updateEventRequest); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	event := updateEventRequest.ToEvent()
+	dbEvent, err := h.store.GetEventByID(userID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
 
-	if err := utils.Validate.Struct(event); err != nil {
+	dbEvent.Title = updateEventRequest.Title
+	dbEvent.Description = updateEventRequest.Description
+	dbEvent.Date = updateEventRequest.Date
+	dbEvent.ImageUrl = updateEventRequest.ImageUrl
+
+	if err := utils.Validate.Struct(dbEvent); err != nil {
 		errors := err.(validator.ValidationErrors)
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", errors))
 		return
 	}
 
-	if err := h.store.UpdateEvent(event); err != nil {
+	if err := h.store.UpdateEvent(dbEvent); err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, event)
+	utils.WriteJSON(w, http.StatusOK, dbEvent)
 }

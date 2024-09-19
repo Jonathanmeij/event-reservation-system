@@ -10,7 +10,7 @@ func TestCreateJWT(t *testing.T) {
 	t.Run("CreateAndValidateCorrectJWT", func(t *testing.T) {
 		secret := "secret"
 		userId := 123
-		jwtToken, err := CreateJWT(userId, []byte(secret))
+		jwtToken, err := CreateJWT(uint(userId), []byte(secret))
 		if err != nil {
 			t.Errorf("CreateJWT() failed: %v", err)
 		}
@@ -41,7 +41,7 @@ func TestCreateJWT(t *testing.T) {
 	t.Run("CreateAndValidateIncorrectSecret", func(t *testing.T) {
 		secret := "secret"
 		userId := 123
-		jwt, err := CreateJWT(userId, []byte(secret))
+		jwt, err := CreateJWT(uint(userId), []byte(secret))
 		if err != nil {
 			t.Errorf("CreateJWT() failed: %v", err)
 		}
@@ -56,7 +56,7 @@ func TestCreateJWT(t *testing.T) {
 	t.Run("CreateAndValidateIncorrectJWT", func(t *testing.T) {
 		secret := "secret"
 		userId := 123
-		_, err := CreateJWT(userId, []byte(secret))
+		_, err := CreateJWT(uint(userId), []byte(secret))
 		if err != nil {
 			t.Errorf("CreateJWT() failed: %v", err)
 		}

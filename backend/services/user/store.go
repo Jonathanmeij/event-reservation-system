@@ -1,6 +1,8 @@
 package user
 
 import (
+	"fmt"
+
 	"github.com/jonathanmeij/go-reservation/types"
 	"gorm.io/gorm"
 )
@@ -13,50 +15,28 @@ func NewStore(db *gorm.DB) *Store {
 	return &Store{db: db}
 }
 
-func (s *Store) CreateUser(user types.User) error {
-	// _, err := s.db.Exec("INSERT INTO users (first_name, last_name, email, role, password) VALUES ($1, $2, $3, $4, $5)", user.FirstName, user.LastName, user.Email, user.Role, user.Password)
+func (s *Store) CreateUser(user types.UserEntity) error {
+	result := s.db.Create(&user)
 
-	return err
+	return result.Error
 }
 
-func (s *Store) GetUserByEmail(email string) (*types.User, error) {
-	// rows, err := s.db.Query("SELECT * FROM users WHERE email = $1", email)
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (s *Store) GetUserByEmail(email string) (*types.UserEntity, error) {
+	var user types.UserEntity
+	result := s.db.Where("email = ?", email).First(&user)
+	if result.Error != nil {
+		return nil, fmt.Errorf("failed to get user: %w", result.Error)
+	}
 
-	// u := new(types.User)
-	// for rows.Next() {
-	// 	u, err = scanRowsIntoUser(rows)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// }
-
-	// if u.ID == 0 {
-	// 	return nil, fmt.Errorf("user not found")
-	// }
-
-	return u, nil
+	return &user, nil
 }
 
-func (s *Store) GetUserByID(id int) (*types.User, error) {
-	// rows, err := s.db.Query("SELECT * FROM users WHERE id = $1", id)
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (s *Store) GetUserByID(id int) (*types.UserEntity, error) {
+	var u types.UserEntity
+	result := s.db.First(&u, id)
+	if result.Error != nil {
+		return nil, fmt.Errorf("failed to get user: %w", result.Error)
+	}
 
-	// u := new(types.User)
-	// for rows.Next() {
-	// 	u, err = scanRowsIntoUser(rows)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// }
-
-	// if u.ID == 0 {
-	// 	return nil, fmt.Errorf("user not found")
-	// }
-
-	return u, nil
+	return &u, nil
 }
