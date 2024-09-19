@@ -15,6 +15,17 @@ type EventEntity struct {
 	PlannedEvents []PlannedEventEntity `gorm:"foreignKey:EventID"`
 }
 
+func (e *EventEntity) ToEvent() Event {
+	return Event{
+		ID:          e.ID,
+		Title:       e.Title,
+		Description: e.Description,
+		ImageUrl:    e.ImageUrl,
+		Date:        e.Date,
+		CreatedAt:   e.CreatedAt,
+	}
+}
+
 type LocationEntity struct {
 	ID             int    `gorm:"primaryKey;autoIncrement"`
 	Name           string `gorm:"not null"`
@@ -39,6 +50,20 @@ type PlannedEventEntity struct {
 	Location   LocationEntity `gorm:"foreignKey:LocationID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Date       time.Time      `gorm:"not null"`
 	Tickets    []TicketEntity `gorm:"foreignKey:PlannedEventID"`
+}
+
+func (p *PlannedEventEntity) ToPlannedEvent() PlannedEvent {
+	return PlannedEvent{
+		ID:         p.ID,
+		EventID:    p.EventID,
+		LocationID: p.LocationID,
+		Date:       p.Date,
+		Location: Location{
+			ID:             p.Location.ID,
+			Name:           p.Location.Name,
+			AmountOfPeople: p.Location.AmountOfPeople,
+		},
+	}
 }
 
 type UserEntity struct {

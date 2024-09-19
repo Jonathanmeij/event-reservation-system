@@ -33,7 +33,7 @@ func (h *Handler) handleGetEventByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	plannedEvent := types.NewPlannedEvent(plannedEventEntity)
+	plannedEvent := plannedEventEntity.ToPlannedEvent()
 
 	utils.WriteJSON(w, http.StatusOK, plannedEvent)
 }

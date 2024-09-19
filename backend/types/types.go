@@ -4,7 +4,7 @@ import "time"
 
 // event
 type Event struct {
-	ID          int       `json:"id"`
+	ID          uint      `json:"id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	ImageUrl    string    `json:"imageUrl"`
@@ -50,15 +50,6 @@ type PlannedEvent struct {
 	LocationID int       `json:"locationId"`
 	Date       time.Time `json:"date"`
 	Location   Location  `json:"location"`
-}
-
-func NewPlannedEvent(plannedEventEntity *PlannedEventEntity) *PlannedEvent {
-	return &PlannedEvent{
-		ID:         plannedEventEntity.ID,
-		EventID:    plannedEventEntity.EventID,
-		LocationID: plannedEventEntity.LocationID,
-		Date:       plannedEventEntity.Date,
-	}
 }
 
 type CreatePlannedEventRequest struct {

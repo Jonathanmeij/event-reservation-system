@@ -18,7 +18,7 @@ const PrivateRoute = ({ role }: { role?: string }) => {
 
   if (isLoading) {
     return (
-      <div className="flex h-dvh w-screen items-center justify-center">
+      <div className="flex items-center justify-center w-screen h-dvh">
         <Spinner />
       </div>
     );
@@ -44,7 +44,6 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/" element={<EventsPage />} />
-
         <Route element={<PrivateRoute role="admin" />}>
           <Route path="/admin" element={<AdminPage />} />
         </Route>

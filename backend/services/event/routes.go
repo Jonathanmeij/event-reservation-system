@@ -30,10 +30,15 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleGetEvents(w http.ResponseWriter, r *http.Request) {
-	events, err := h.store.GetEvents()
+	eventEntities, err := h.store.GetEvents()
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
+	}
+
+	events := make([]types.Event, 0, len(eventEntities))
+	for _, eventEntity := range eventEntities {
+		events = append(events, eventEntity.ToEvent())
 	}
 
 	utils.WriteJSON(w, http.StatusOK, events)
@@ -46,11 +51,13 @@ func (h *Handler) handleGetEventByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	event, err := h.store.GetEventByID(id)
+	EventEntity, err := h.store.GetEventByID(id)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
+
+	event := EventEntity.ToEvent()
 
 	utils.WriteJSON(w, http.StatusOK, event)
 }
