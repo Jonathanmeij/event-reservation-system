@@ -4,12 +4,13 @@ import "time"
 
 // event
 type Event struct {
-	ID          uint      `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	ImageUrl    string    `json:"imageUrl"`
-	Date        time.Time `json:"date"`
-	CreatedAt   time.Time `json:"createdAt"`
+	ID            uint           `json:"id"`
+	Title         string         `json:"title"`
+	Description   string         `json:"description"`
+	ImageUrl      string         `json:"imageUrl"`
+	Date          time.Time      `json:"date"`
+	CreatedAt     time.Time      `json:"createdAt"`
+	PlannedEvents []PlannedEvent `json:"plannedEvents"`
 }
 
 type CreateEventRequest struct {

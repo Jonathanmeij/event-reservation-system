@@ -13,6 +13,7 @@ export interface Event {
   imageUrl: string;
   date: Date ;
   createdAt: Date ;
+  plannedEvents: PlannedEvent[];
 }
 export interface CreateEventRequest {
   title: string;

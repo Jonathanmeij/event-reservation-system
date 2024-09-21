@@ -23,6 +23,7 @@ func NewHandler(store types.EventStore, userStore types.UserStore) *Handler {
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/events", h.handleGetEvents).Methods(http.MethodGet)
 	router.HandleFunc("/events/{id}", h.handleGetEventByID).Methods(http.MethodGet)
+	router.HandleFunc("/eventsWithPlanned", h.handleGetEventsWithPlannedEvents).Methods(http.MethodGet)
 
 	router.HandleFunc("/events", auth.WithJWTAuthRole(h.handleCreateEvent, h.userStore, "admin")).Methods(http.MethodPost)
 	router.HandleFunc("/events/{id}", auth.WithJWTAuthRole(h.handleDeleteEvent, h.userStore, "admin")).Methods(http.MethodDelete)
@@ -31,6 +32,21 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 
 func (h *Handler) handleGetEvents(w http.ResponseWriter, r *http.Request) {
 	eventEntities, err := h.store.GetEvents()
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	events := make([]types.Event, 0, len(eventEntities))
+	for _, eventEntity := range eventEntities {
+		events = append(events, eventEntity.ToEvent())
+	}
+
+	utils.WriteJSON(w, http.StatusOK, events)
+}
+
+func (h *Handler) handleGetEventsWithPlannedEvents(w http.ResponseWriter, r *http.Request) {
+	eventEntities, err := h.store.GetEventsWithPlannedEvents()
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return

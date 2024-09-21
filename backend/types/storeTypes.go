@@ -3,6 +3,7 @@ package types
 type EventStore interface {
 	GetEventByID(id int) (*EventEntity, error)
 	GetEvents() ([]*EventEntity, error)
+	GetEventsWithPlannedEvents() ([]*EventEntity, error)
 	CreateEvent(event EventEntity) error
 	DeleteEvent(id int) error
 	UpdateEvent(event *EventEntity) error

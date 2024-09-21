@@ -17,7 +17,7 @@ func NewHandler(store types.PlannedEventStore) *Handler {
 }
 
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/events/{id}", h.handleGetEventByID).Methods(http.MethodGet)
+	router.HandleFunc("/plannedevents/{id}", h.handleGetEventByID).Methods(http.MethodGet)
 }
 
 func (h *Handler) handleGetEventByID(w http.ResponseWriter, r *http.Request) {

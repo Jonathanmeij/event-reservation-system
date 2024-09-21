@@ -16,13 +16,18 @@ type EventEntity struct {
 }
 
 func (e *EventEntity) ToEvent() Event {
+	plannedEvents := make([]PlannedEvent, len(e.PlannedEvents))
+	for i, plannedEvent := range e.PlannedEvents {
+		plannedEvents[i] = plannedEvent.ToPlannedEvent()
+	}
 	return Event{
-		ID:          e.ID,
-		Title:       e.Title,
-		Description: e.Description,
-		ImageUrl:    e.ImageUrl,
-		Date:        e.Date,
-		CreatedAt:   e.CreatedAt,
+		ID:            e.ID,
+		Title:         e.Title,
+		Description:   e.Description,
+		ImageUrl:      e.ImageUrl,
+		Date:          e.Date,
+		CreatedAt:     e.CreatedAt,
+		PlannedEvents: plannedEvents,
 	}
 }
 
