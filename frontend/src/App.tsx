@@ -48,7 +48,12 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/" element={<EventsPage />} />
           <Route element={<PrivateRoute role="admin" />}>
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin" element={<AdminPage />}>
+              <Route path="events" element={<div>Events</div>} />
+              <Route path="locations" element={<div>Locations</div>} />
+              <Route path="tickets" element={<div>Tickets</div>} />
+              <Route path="users" element={<div>Users</div>} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
