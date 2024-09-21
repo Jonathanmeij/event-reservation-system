@@ -24,9 +24,9 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/events", h.handleGetEvents).Methods(http.MethodGet)
 	router.HandleFunc("/events/{id}", h.handleGetEventByID).Methods(http.MethodGet)
 
-	router.HandleFunc("/events", auth.WithJWTAuth(h.handleCreateEvent, h.userStore)).Methods(http.MethodPost)
-	router.HandleFunc("/events/{id}", auth.WithJWTAuth(h.handleDeleteEvent, h.userStore)).Methods(http.MethodDelete)
-	router.HandleFunc("/events/{id}", auth.WithJWTAuth(h.handleUpdateEvent, h.userStore)).Methods(http.MethodPut)
+	router.HandleFunc("/events", auth.WithJWTAuthRole(h.handleCreateEvent, h.userStore, "admin")).Methods(http.MethodPost)
+	router.HandleFunc("/events/{id}", auth.WithJWTAuthRole(h.handleDeleteEvent, h.userStore, "admin")).Methods(http.MethodDelete)
+	router.HandleFunc("/events/{id}", auth.WithJWTAuthRole(h.handleUpdateEvent, h.userStore, "admin")).Methods(http.MethodPut)
 }
 
 func (h *Handler) handleGetEvents(w http.ResponseWriter, r *http.Request) {

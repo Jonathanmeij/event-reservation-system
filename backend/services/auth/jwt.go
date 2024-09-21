@@ -18,36 +18,65 @@ type contextKey string
 
 const UserKey contextKey = "userID"
 
+func jwtAuthHelper(w http.ResponseWriter, r *http.Request, store types.UserStore) (*types.UserEntity, bool) {
+	tokenString := utils.GetTokenFromRequest(r)
+
+	token, err := validateJWT(tokenString, []byte(configs.Envs.JWTSecret))
+	if err != nil {
+		log.Printf("failed to validate token: %v", err)
+		permissionDenied(w)
+		return nil, false
+	}
+
+	if !token.Valid {
+		log.Println("invalid token")
+		permissionDenied(w)
+		return nil, false
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	str := claims["userID"].(string)
+
+	userID, err := strconv.Atoi(str)
+	if err != nil {
+		log.Printf("failed to convert userID to int: %v", err)
+		permissionDenied(w)
+		return nil, false
+	}
+
+	u, err := store.GetUserByID(userID)
+	if err != nil {
+		log.Printf("failed to get user by id: %v", err)
+		permissionDenied(w)
+		return nil, false
+	}
+
+	return u, true
+}
+
 func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tokenString := utils.GetTokenFromRequest(r)
-
-		token, err := validateJWT(tokenString, []byte(configs.Envs.JWTSecret))
-		if err != nil {
-			log.Printf("failed to validate token: %v", err)
-			permissionDenied(w)
+		u, ok := jwtAuthHelper(w, r, store)
+		if !ok {
 			return
 		}
 
-		if !token.Valid {
-			log.Println("invalid token")
-			permissionDenied(w)
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, UserKey, u.ID)
+		r = r.WithContext(ctx)
+
+		handlerFunc(w, r)
+	}
+}
+
+func WithJWTAuthRole(handlerFunc http.HandlerFunc, store types.UserStore, role string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		u, ok := jwtAuthHelper(w, r, store)
+		if !ok {
 			return
 		}
 
-		claims := token.Claims.(jwt.MapClaims)
-		str := claims["userID"].(string)
-
-		userID, err := strconv.Atoi(str)
-		if err != nil {
-			log.Printf("failed to convert userID to int: %v", err)
-			permissionDenied(w)
-			return
-		}
-
-		u, err := store.GetUserByID(userID)
-		if err != nil {
-			log.Printf("failed to get user by id: %v", err)
+		if u.Role != role {
 			permissionDenied(w)
 			return
 		}
