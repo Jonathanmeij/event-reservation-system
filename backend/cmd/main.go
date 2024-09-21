@@ -6,15 +6,14 @@ import (
 
 	"github.com/jonathanmeij/go-reservation/cmd/api"
 	"github.com/jonathanmeij/go-reservation/configs"
+	"github.com/jonathanmeij/go-reservation/db"
 	"github.com/jonathanmeij/go-reservation/types"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func main() {
-	db, err := gorm.Open(postgres.Open("user=postgres dbname=postgres password=gobank sslmode=disable port=5432 host=localhost TimeZone=Europe/Amsterdam"), &gorm.Config{})
+	db, err := db.NewDatabase()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to connect to database: ", err)
 	}
 
 	err = db.AutoMigrate(

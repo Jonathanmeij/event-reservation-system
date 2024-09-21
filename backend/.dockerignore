@@ -1,0 +1,7 @@
+.dockerignore
+.gitignore
+MakeFile
+tygo.yaml
+.env
+.env.example
+db/migrations

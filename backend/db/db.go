@@ -1,24 +1,20 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
+	"github.com/jonathanmeij/go-reservation/configs"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-// todo receive env data
-func NewDatabase(user string, dbname string, password string) (*sql.DB, error) {
-	connStr := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=disable", user, dbname, password)
-	log.Println(connStr)
-	db, err := sql.Open("postgres", connStr)
+func NewDatabase() (*gorm.DB, error) {
+	connectionString := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=disable port=%s host=localhost TimeZone=Europe/Amsterdam", configs.Envs.DBUser, configs.Envs.DBName, configs.Envs.DBPassword, configs.Envs.DBPort)
+	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
-		return nil, err
-	}
-
-	if err := db.Ping(); err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
 	return db, nil

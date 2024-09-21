@@ -1,6 +1,6 @@
 module github.com/jonathanmeij/go-reservation
 
-go 1.23.1
+go 1.23
 
 require (
 	github.com/go-playground/validator/v10 v10.22.1
