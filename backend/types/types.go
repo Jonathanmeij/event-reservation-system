@@ -8,7 +8,6 @@ type Event struct {
 	Title         string         `json:"title"`
 	Description   string         `json:"description"`
 	ImageUrl      string         `json:"imageUrl"`
-	Date          time.Time      `json:"date"`
 	CreatedAt     time.Time      `json:"createdAt"`
 	PlannedEvents []PlannedEvent `json:"plannedEvents"`
 }
@@ -25,7 +24,6 @@ func (r *CreateEventRequest) ToEvent() EventEntity {
 		Title:       r.Title,
 		Description: r.Description,
 		ImageUrl:    r.ImageUrl,
-		Date:        r.Date,
 	}
 }
 
@@ -41,7 +39,6 @@ func (r *UpdateEventRequest) ToEvent() EventEntity {
 		Title:       r.Title,
 		Description: r.Description,
 		ImageUrl:    r.ImageUrl,
-		Date:        r.Date,
 	}
 }
 
@@ -59,6 +56,14 @@ type CreatePlannedEventRequest struct {
 	Date       time.Time `json:"date" validate:"required"`
 }
 
+func (r *CreatePlannedEventRequest) ToPlannedEvent() PlannedEventEntity {
+	return PlannedEventEntity{
+		EventID:    r.EventID,
+		LocationID: r.LocationID,
+		Date:       r.Date,
+	}
+}
+
 // Location
 type Location struct {
 	ID             int    `json:"id"`
@@ -66,11 +71,23 @@ type Location struct {
 	AmountOfPeople int    `json:"amountOfPeople"`
 }
 
+type CreateLocationRequest struct {
+	Name           string `json:"name" validate:"required"`
+	AmountOfPeople int    `json:"amountOfPeople" validate:"required"`
+}
+
 func NewLocation(locationEntity LocationEntity) *Location {
 	return &Location{
 		ID:             locationEntity.ID,
 		Name:           locationEntity.Name,
 		AmountOfPeople: locationEntity.AmountOfPeople,
+	}
+}
+
+func (r *CreateLocationRequest) ToLocationEntity() LocationEntity {
+	return LocationEntity{
+		Name:           r.Name,
+		AmountOfPeople: r.AmountOfPeople,
 	}
 }
 

@@ -6,6 +6,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jonathanmeij/go-reservation/services/event"
+	"github.com/jonathanmeij/go-reservation/services/location"
+	"github.com/jonathanmeij/go-reservation/services/plannedEvents"
 	"github.com/jonathanmeij/go-reservation/services/user"
 	"github.com/rs/cors"
 	"gorm.io/gorm"
@@ -34,6 +36,14 @@ func (s *APIServer) Run() error {
 	eventStore := event.NewStore(s.db)
 	eventHandler := event.NewHandler(eventStore, userStore)
 	eventHandler.RegisterRoutes(subrouter)
+
+	plannedEventStore := plannedEvents.NewStore(s.db)
+	plannedEventHandler := plannedEvents.NewHandler(plannedEventStore, userStore)
+	plannedEventHandler.RegisterRoutes(subrouter)
+
+	locationStore := location.NewStore(s.db)
+	locationHandler := location.NewHandler(locationStore, userStore)
+	locationHandler.RegisterRoutes(subrouter)
 
 	//static files
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("static")))

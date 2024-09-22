@@ -135,7 +135,6 @@ func (h *Handler) handleUpdateEvent(w http.ResponseWriter, r *http.Request) {
 
 	dbEvent.Title = updateEventRequest.Title
 	dbEvent.Description = updateEventRequest.Description
-	dbEvent.Date = updateEventRequest.Date
 	dbEvent.ImageUrl = updateEventRequest.ImageUrl
 
 	if err := utils.Validate.Struct(dbEvent); err != nil {

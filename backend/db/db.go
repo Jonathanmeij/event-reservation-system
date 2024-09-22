@@ -11,7 +11,7 @@ import (
 )
 
 func NewDatabase() (*gorm.DB, error) {
-	connectionString := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=disable port=%s host=localhost TimeZone=Europe/Amsterdam", configs.Envs.DBUser, configs.Envs.DBName, configs.Envs.DBPassword, configs.Envs.DBPort)
+	connectionString := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=disable port=%s host=%s TimeZone=Europe/Amsterdam", configs.Envs.DBUser, configs.Envs.DBName, configs.Envs.DBPassword, configs.Envs.DBPort, configs.Envs.DBHost)
 	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)

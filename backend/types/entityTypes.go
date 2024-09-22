@@ -11,7 +11,6 @@ type EventEntity struct {
 	Title         string `gorm:"not null"`
 	Description   string `gorm:"not null"`
 	ImageUrl      string
-	Date          time.Time            `gorm:"not null"`
 	PlannedEvents []PlannedEventEntity `gorm:"foreignKey:EventID"`
 }
 
@@ -25,7 +24,6 @@ func (e *EventEntity) ToEvent() Event {
 		Title:         e.Title,
 		Description:   e.Description,
 		ImageUrl:      e.ImageUrl,
-		Date:          e.Date,
 		CreatedAt:     e.CreatedAt,
 		PlannedEvents: plannedEvents,
 	}
@@ -35,6 +33,14 @@ type LocationEntity struct {
 	ID             int    `gorm:"primaryKey;autoIncrement"`
 	Name           string `gorm:"not null"`
 	AmountOfPeople int    `gorm:"not null"`
+}
+
+func (l *LocationEntity) ToLocation() Location {
+	return Location{
+		ID:             l.ID,
+		Name:           l.Name,
+		AmountOfPeople: l.AmountOfPeople,
+	}
 }
 
 type TicketEntity struct {

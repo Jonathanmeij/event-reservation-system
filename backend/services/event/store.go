@@ -37,7 +37,7 @@ func (s *Store) GetEvents() ([]*types.EventEntity, error) {
 
 func (s *Store) GetEventsWithPlannedEvents() ([]*types.EventEntity, error) {
 	var events []*types.EventEntity
-	result := s.db.Preload("PlannedEvents").Find(&events)
+	result := s.db.Preload("PlannedEvents").Preload("Location").Find(&events)
 	if result.Error != nil {
 		return nil, fmt.Errorf("failed to get events with planned events: %w", result.Error)
 	}

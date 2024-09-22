@@ -18,6 +18,7 @@ type Config struct {
 	DBPort                 string
 	JWTSecret              string
 	JWTExpirationInSeconds int64
+	DBHost                 string
 }
 
 var Envs = initConfig()
@@ -39,6 +40,7 @@ func initConfig() Config {
 		DBPort:                 getEnv("DB_PORT", "fallback"),
 		JWTSecret:              getEnv("JWT_SECRET", "fallback"),
 		JWTExpirationInSeconds: getEnvAsInt("JWT_EXPIRATION_IN_SECONDS", 3600*24*7),
+		DBHost:                 getEnv("DB_HOST", "localhost"),
 	}
 }
 
