@@ -23,7 +23,7 @@ func NewHandler(store types.EventStore, userStore types.UserStore) *Handler {
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/events", h.handleGetEvents).Methods(http.MethodGet)
 	router.HandleFunc("/events/{id}", h.handleGetEventByID).Methods(http.MethodGet)
-	router.HandleFunc("/eventsWithPlanned", h.handleGetEventsWithPlannedEvents).Methods(http.MethodGet)
+	router.HandleFunc("/events-with-planned", h.handleGetEventsWithPlannedEvents).Methods(http.MethodGet)
 
 	router.HandleFunc("/events", auth.WithJWTAuthRole(h.handleCreateEvent, h.userStore, "admin")).Methods(http.MethodPost)
 	router.HandleFunc("/events/{id}", auth.WithJWTAuthRole(h.handleDeleteEvent, h.userStore, "admin")).Methods(http.MethodDelete)
@@ -135,7 +135,7 @@ func (h *Handler) handleUpdateEvent(w http.ResponseWriter, r *http.Request) {
 
 	dbEvent.Title = updateEventRequest.Title
 	dbEvent.Description = updateEventRequest.Description
-	dbEvent.ImageUrl = updateEventRequest.ImageUrl
+	dbEvent.Images = updateEventRequest.Images
 
 	if err := utils.Validate.Struct(dbEvent); err != nil {
 		errors := err.(validator.ValidationErrors)

@@ -10,22 +10,32 @@ export interface Event {
   id: number /* uint */;
   title: string;
   description: string;
-  imageUrl: string;
-  date: Date ;
+  images: string[];
+  cast: string[];
+  directors: string[];
+  genres: string[];
+  Duration: number /* int */;
   createdAt: Date ;
   plannedEvents: PlannedEvent[];
 }
 export interface CreateEventRequest {
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl: string[];
+  cast: string[];
+  directors: string[];
+  genres: string[];
+  Duration: number /* int */;
   date: Date ;
 }
 export interface UpdateEventRequest {
   title: string;
   description: string;
-  imageUrl: string;
-  date: Date ;
+  images: string[];
+  cast: string[];
+  directors: string[];
+  genres: string[];
+  duration: number /* int */;
 }
 export interface PlannedEvent {
   id: number /* uint */;
@@ -44,6 +54,10 @@ export interface CreatePlannedEventRequest {
  */
 export interface Location {
   id: number /* int */;
+  name: string;
+  amountOfPeople: number /* int */;
+}
+export interface CreateLocationRequest {
   name: string;
   amountOfPeople: number /* int */;
 }

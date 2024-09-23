@@ -7,7 +7,11 @@ type Event struct {
 	ID            uint           `json:"id"`
 	Title         string         `json:"title"`
 	Description   string         `json:"description"`
-	ImageUrl      string         `json:"imageUrl"`
+	Images        []string       `json:"images"`
+	Cast          []string       `json:"cast"`
+	Directors     []string       `json:"directors"`
+	Genres        []string       `json:"genres"`
+	Duration      int            `gorm:"not null"`
 	CreatedAt     time.Time      `json:"createdAt"`
 	PlannedEvents []PlannedEvent `json:"plannedEvents"`
 }
@@ -15,7 +19,11 @@ type Event struct {
 type CreateEventRequest struct {
 	Title       string    `json:"title" validate:"required"`
 	Description string    `json:"description" validate:"required"`
-	ImageUrl    string    `json:"imageUrl" validate:"required"`
+	Images      []string  `json:"images" validate:"required"`
+	Cast        []string  `json:"cast"`
+	Directors   []string  `json:"directors"`
+	Genres      []string  `json:"genres"`
+	Duration    int       `gorm:"not null"`
 	Date        time.Time `json:"date" validate:"required"`
 }
 
@@ -23,22 +31,33 @@ func (r *CreateEventRequest) ToEvent() EventEntity {
 	return EventEntity{
 		Title:       r.Title,
 		Description: r.Description,
-		ImageUrl:    r.ImageUrl,
+		Images:      r.Images,
+		Cast:        r.Cast,
+		Directors:   r.Directors,
+		Genres:      r.Genres,
+		Duration:    r.Duration,
 	}
 }
 
 type UpdateEventRequest struct {
-	Title       string    `json:"title" validate:"required"`
-	Description string    `json:"description" validate:"required"`
-	ImageUrl    string    `json:"imageUrl" validate:"required"`
-	Date        time.Time `json:"date" validate:"required"`
+	Title       string   `json:"title" validate:"required"`
+	Description string   `json:"description" validate:"required"`
+	Images      []string `json:"images" validate:"required"`
+	Cast        []string `json:"cast"`
+	Directors   []string `json:"directors"`
+	Genres      []string `json:"genres"`
+	Duration    int      `json:"duration"`
 }
 
 func (r *UpdateEventRequest) ToEvent() EventEntity {
 	return EventEntity{
 		Title:       r.Title,
 		Description: r.Description,
-		ImageUrl:    r.ImageUrl,
+		Images:      r.Images,
+		Cast:        r.Cast,
+		Directors:   r.Directors,
+		Genres:      r.Genres,
+		Duration:    r.Duration,
 	}
 }
 

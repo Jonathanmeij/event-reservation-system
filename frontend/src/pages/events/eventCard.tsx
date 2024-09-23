@@ -5,7 +5,7 @@ export default function EventCard({ event }: { event: Event }) {
   return (
     <Card className="relative overflow-hidden group hover:cursor-pointer">
       <img
-        src={event.imageUrl}
+        src={event.images ? event.images[0] : ""}
         alt={event.title}
         className="object-cover w-full transition-transform duration-300 ease-out transform h-52 group-hover:scale-105"
       />

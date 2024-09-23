@@ -7,7 +7,7 @@ export default function AdminPage() {
     <PageContainer>
       <div className="flex flex-1 gap-6 py-3">
         <SideBar />
-        <div className="py-4">
+        <div className="w-full">
           <Outlet />
         </div>
       </div>

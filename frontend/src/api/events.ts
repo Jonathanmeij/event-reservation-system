@@ -26,3 +26,8 @@ export async function updateEvent(event: UpdateEventRequest) {
 export async function deleteEvent(id: string) {
   await axios.delete(`${ENDPOINT}/${id}`);
 }
+
+export async function getEventsWithPlannedEvents() {
+  const { data } = await axios.get(`${ENDPOINT}-with-planned`);
+  return data;
+}

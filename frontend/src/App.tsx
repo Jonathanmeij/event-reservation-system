@@ -13,6 +13,8 @@ import { AuthContext } from "./contexts/authContext";
 import Spinner from "./components/ui/spinner";
 import AdminPage from "./pages/admin/adminPage";
 import Navbar from "./components/navbar";
+import EventsOverview from "./pages/admin/events/eventsOverview";
+import LocationsOverview from "./pages/admin/location/locationsOverview";
 
 const PrivateRoute = ({ role }: { role?: string }) => {
   const { isAuthenticated, isLoading, userData } = useContext(AuthContext);
@@ -49,8 +51,8 @@ function App() {
           <Route path="/" element={<EventsPage />} />
           <Route element={<PrivateRoute role="admin" />}>
             <Route path="/admin" element={<AdminPage />}>
-              <Route path="events" element={<div>Events</div>} />
-              <Route path="locations" element={<div>Locations</div>} />
+              <Route path="events" element={<EventsOverview />} />
+              <Route path="locations" element={<LocationsOverview />} />
               <Route path="tickets" element={<div>Tickets</div>} />
               <Route path="users" element={<div>Users</div>} />
             </Route>

@@ -3,14 +3,19 @@ package types
 import (
 	"time"
 
+	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
 type EventEntity struct {
 	gorm.Model
-	Title         string `gorm:"not null"`
-	Description   string `gorm:"not null"`
-	ImageUrl      string
+	Title         string         `gorm:"not null"`
+	Description   string         `gorm:"not null"`
+	Images        pq.StringArray `gorm:"type:text[]"`
+	Cast          pq.StringArray `gorm:"type:text[]"`
+	Directors     pq.StringArray `gorm:"type:text[]"`
+	Genres        pq.StringArray `gorm:"type:text[]"`
+	Duration      int
 	PlannedEvents []PlannedEventEntity `gorm:"foreignKey:EventID"`
 }
 
@@ -23,9 +28,13 @@ func (e *EventEntity) ToEvent() Event {
 		ID:            e.ID,
 		Title:         e.Title,
 		Description:   e.Description,
-		ImageUrl:      e.ImageUrl,
+		Images:        e.Images,
 		CreatedAt:     e.CreatedAt,
 		PlannedEvents: plannedEvents,
+		Cast:          e.Cast,
+		Directors:     e.Directors,
+		Genres:        e.Genres,
+		Duration:      e.Duration,
 	}
 }
 
